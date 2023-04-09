@@ -1,5 +1,5 @@
 from searching_framework.utils import Problem
-from searching_framework.uninformed_search import *
+from searching_framework.informed_search import astar_search
 
 class Pacman(Problem):
     def __init__(self, initial,obstacles_list, goal=None):
@@ -16,9 +16,10 @@ class Pacman(Problem):
         nasoka = state[2]
         tocki = state[3]
 
+
     #ProdolzhiPravo
         if nasoka == "istok":
-            if pacman_x + 1 < self.grid_size[1] and (pacman_x + 1, pacman_y) not in obstacles_list:
+            if pacman_x + 1 < self.grid_size[1] and (pacman_x + 1, pacman_y) not in self.obstacles_list:
                 if (pacman_x + 1, pacman_y) in tocki:
                     tocki_lista = tuple(tocka for tocka in tocki if tocka != (pacman_x + 1, pacman_y)) #jade
                     successors["ProdolzhiPravo"] = (pacman_x + 1, pacman_y, nasoka, tuple(tocki_lista))
@@ -26,7 +27,7 @@ class Pacman(Problem):
                     successors["ProdolzhiPravo"] = (pacman_x + 1, pacman_y, nasoka, tuple(tocki))
 
         if nasoka == "zapad":
-            if pacman_x - 1 >= 0 and (pacman_x - 1, pacman_y) not in obstacles_list:
+            if pacman_x - 1 >= 0 and (pacman_x - 1, pacman_y) not in self.obstacles_list:
                 if (pacman_x - 1, pacman_y) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x - 1, pacman_y)]  # jade
                     successors["ProdolzhiPravo"] = (pacman_x - 1, pacman_y, nasoka, tuple(tocki_lista))
@@ -34,7 +35,7 @@ class Pacman(Problem):
                     successors["ProdolzhiPravo"] = (pacman_x - 1, pacman_y, nasoka, tuple(tocki))
 
         if nasoka == "sever":
-            if pacman_y + 1 < self.grid_size[0] and (pacman_x, pacman_y + 1) not in obstacles_list:
+            if pacman_y + 1 < self.grid_size[0] and (pacman_x, pacman_y + 1) not in self.obstacles_list:
                 if (pacman_x, pacman_y + 1) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x, pacman_y + 1)]  # jade
                     successors["ProdolzhiPravo"] = (pacman_x, pacman_y + 1, nasoka, tuple(tocki_lista))
@@ -42,7 +43,7 @@ class Pacman(Problem):
                     successors["ProdolzhiPravo"] = (pacman_x, pacman_y + 1, nasoka, tuple(tocki))
 
         if nasoka == "jug":
-            if pacman_y - 1 >= 0 and (pacman_x, pacman_y - 1) not in obstacles_list:
+            if pacman_y - 1 >= 0 and (pacman_x, pacman_y - 1) not in self.obstacles_list:
                 if (pacman_x, pacman_y - 1) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x, pacman_y - 1)]  # jade
                     successors["ProdolzhiPravo"] = (pacman_x, pacman_y - 1, nasoka, tuple(tocki_lista))
@@ -51,7 +52,7 @@ class Pacman(Problem):
 
     #ProdolzhiNazad
         if nasoka == "istok":
-            if pacman_x - 1 >= 0 and (pacman_x - 1, pacman_y) not in obstacles_list:
+            if pacman_x - 1 >= 0 and (pacman_x - 1, pacman_y) not in self.obstacles_list:
                 if (pacman_x - 1, pacman_y) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x - 1, pacman_y) ] #jade
                     successors["ProdolzhiNazad"] = (pacman_x - 1, pacman_y, "zapad", tuple(tocki_lista))
@@ -59,7 +60,7 @@ class Pacman(Problem):
                     successors["ProdolzhiNazad"] = (pacman_x - 1, pacman_y, "zapad", tuple(tocki))
 
         if nasoka == "zapad":
-            if pacman_x + 1 < self.grid_size[0] and (pacman_x + 1, pacman_y) not in obstacles_list:
+            if pacman_x + 1 < self.grid_size[0] and (pacman_x + 1, pacman_y) not in self.obstacles_list:
                 if (pacman_x + 1, pacman_y) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x + 1, pacman_y)]  # jade
                     successors["ProdolzhiNazad"] = (pacman_x + 1, pacman_y, "istok", tuple(tocki_lista))
@@ -67,7 +68,7 @@ class Pacman(Problem):
                     successors["ProdolzhiNazad"] = (pacman_x + 1, pacman_y, "istok", tuple(tocki))
 
         if nasoka == "sever":
-            if pacman_y - 1 >= 0 and (pacman_x, pacman_y - 1) not in obstacles_list:
+            if pacman_y - 1 >= 0 and (pacman_x, pacman_y - 1) not in self.obstacles_list:
                 if (pacman_x, pacman_y - 1) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x, pacman_y - 1)]  # jade
                     successors["ProdolzhiNazad"] = (pacman_x, pacman_y - 1, "jug", tuple(tocki_lista))
@@ -75,7 +76,7 @@ class Pacman(Problem):
                     successors["ProdolzhiNazad"] = (pacman_x, pacman_y - 1, "jug", tuple(tocki))
 
         if nasoka == "jug":
-            if pacman_y + 1 < self.grid_size[1] and (pacman_x, pacman_y + 1) not in obstacles_list:
+            if pacman_y + 1 < self.grid_size[1] and (pacman_x, pacman_y + 1) not in self.obstacles_list:
                 if (pacman_x, pacman_y + 1) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x, pacman_y + 1)]  # jade
                     successors["ProdolzhiNazad"] = (pacman_x, pacman_y + 1, "sever", tuple(tocki_lista))
@@ -84,7 +85,7 @@ class Pacman(Problem):
 
     #SvrtiLevo
         if nasoka == "istok":
-            if pacman_y + 1 < self.grid_size[1] and (pacman_x, pacman_y + 1) not in obstacles_list:
+            if pacman_y + 1 < self.grid_size[1] and (pacman_x, pacman_y + 1) not in self.obstacles_list:
                 if (pacman_x, pacman_y + 1) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x, pacman_y + 1)] #jade
                     successors["SvrtiLevo"] = (pacman_x, pacman_y + 1, "sever", tuple(tocki_lista))
@@ -92,7 +93,7 @@ class Pacman(Problem):
                     successors["SvrtiLevo"] = (pacman_x, pacman_y + 1, "sever", tuple(tocki))
 
         if nasoka == "zapad":
-            if pacman_y - 1 >= 0 and (pacman_x, pacman_y - 1) not in obstacles_list:
+            if pacman_y - 1 >= 0 and (pacman_x, pacman_y - 1) not in self.obstacles_list:
                 if (pacman_x, pacman_y - 1) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x, pacman_y - 1)]  # jade
                     successors["SvrtiLevo"] = (pacman_x, pacman_y - 1, "jug", tuple(tocki_lista))
@@ -100,7 +101,7 @@ class Pacman(Problem):
                     successors["SvrtiLevo"] = (pacman_x, pacman_y - 1, "jug", tuple(tocki))
 
         if nasoka == "sever":
-            if pacman_x - 1 >= 0 and (pacman_x - 1, pacman_y) not in obstacles_list:
+            if pacman_x - 1 >= 0 and (pacman_x - 1, pacman_y) not in self.obstacles_list:
                 if (pacman_x - 1, pacman_y) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x - 1, pacman_y)]  # jade
                     successors["SvrtiLevo"] = (pacman_x - 1, pacman_y, "zapad", tuple(tocki_lista))
@@ -108,7 +109,7 @@ class Pacman(Problem):
                     successors["SvrtiLevo"] = (pacman_x - 1, pacman_y, "zapad", tuple(tocki))
 
         if nasoka == "jug":
-            if pacman_x + 1 < self.grid_size[1] and (pacman_x + 1, pacman_y) not in obstacles_list:
+            if pacman_x + 1 < self.grid_size[1] and (pacman_x + 1, pacman_y) not in self.obstacles_list:
                 if (pacman_x + 1, pacman_y) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x + 1, pacman_y)]  # jade
                     successors["SvrtiLevo"] = (pacman_x + 1, pacman_y, "istok", tuple(tocki_lista))
@@ -116,7 +117,7 @@ class Pacman(Problem):
                     successors["SvrtiLevo"] = (pacman_x + 1, pacman_y, "istok", tuple(tocki))
     #SvrtiDesno
         if nasoka == "istok":
-            if pacman_y - 1 >= 0 and (pacman_x, pacman_y - 1) not in obstacles_list:
+            if pacman_y - 1 >= 0 and (pacman_x, pacman_y - 1) not in self.obstacles_list:
                 if (pacman_x, pacman_y - 1) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x, pacman_y - 1)] #jade
                     successors["SvrtiDesno"] = (pacman_x, pacman_y - 1, "jug", tuple(tocki_lista))
@@ -124,7 +125,7 @@ class Pacman(Problem):
                     successors["SvrtiDesno"] = (pacman_x, pacman_y - 1, "jug", tuple(tocki))
 
         if nasoka == "zapad":
-            if pacman_y + 1 < self.grid_size[1] and (pacman_x, pacman_y + 1) not in obstacles_list:
+            if pacman_y + 1 < self.grid_size[1] and (pacman_x, pacman_y + 1) not in self.obstacles_list:
                 if (pacman_x, pacman_y + 1) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x, pacman_y + 1)]  # jade
                     successors["SvrtiDesno"] = (pacman_x, pacman_y + 1, "sever", tuple(tocki_lista))
@@ -132,7 +133,7 @@ class Pacman(Problem):
                     successors["SvrtiDesno"] = (pacman_x, pacman_y + 1, "sever", tuple(tocki))
 
         if nasoka == "sever":
-            if pacman_x + 1 < self.grid_size[0] and (pacman_x + 1, pacman_y) not in obstacles_list:
+            if pacman_x + 1 < self.grid_size[0] and (pacman_x + 1, pacman_y) not in self.obstacles_list:
                 if (pacman_x + 1, pacman_y) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x + 1, pacman_y)]  # jade
                     successors["SvrtiDesno"] = (pacman_x + 1, pacman_y, "istok", tuple(tocki_lista))
@@ -140,7 +141,7 @@ class Pacman(Problem):
                     successors["SvrtiDesno"] = (pacman_x + 1, pacman_y, "istok", tuple(tocki))
 
         if nasoka == "jug":
-            if pacman_x - 1 >= 0 and (pacman_x - 1, pacman_y) not in obstacles_list:
+            if pacman_x - 1 >= 0 and (pacman_x - 1, pacman_y) not in self.obstacles_list:
                 if (pacman_x - 1, pacman_y) in tocki:
                     tocki_lista = [tocka for tocka in tocki if tocka != (pacman_x - 1, pacman_y)]  # jade
                     successors["SvrtiDesno"] = (pacman_x - 1, pacman_y, "zapad", tuple(tocki_lista))
@@ -156,10 +157,25 @@ class Pacman(Problem):
     def result(self, state, action):
         return self.successor(state)[action]
 
-
     def goal_test(self, state):
 
         return len(state[3]) == 0
+
+    def h(self, node):
+        man_x, man_y, direction = node.state[0], node.state[1], node.state[2]
+        distances_to_points = []
+        for point in tocki:
+            x, y = point
+            distance = abs(man_x - x) + abs(man_y - y)
+            distances_to_points.append(distance)
+        min_distance_to_points = min(distances_to_points)
+        distances_to_obstacles = []
+        for obstacle in obstacles_list:
+            x, y = obstacle
+            distance = abs(man_x - x) + abs(man_y - y)
+            distances_to_obstacles.append(distance)
+        min_distance_to_obstacles = min(distances_to_obstacles)
+        return max(min_distance_to_points, min_distance_to_obstacles) * 2
 
 
 
@@ -171,18 +187,24 @@ if __name__ == "__main__":
                     [2,9], [3,6], [3,9],[4,1], [4,5], [4,6], [4,7], [5,1],
                     [5,6], [6,0], [6,1], [6,2], [6,9], [8,1], [8,4], [8,7], [8,8], [9,4], [9,7], [9,8]]
 
-    x = int(input())
-    y = int(input())
+    # x = int(input())
+    # y = int(input())
 
-    nasoka = input()
+    x = 0
+    y = 0
 
-    n = int(input())
-    tocki = []
+    # nasoka = input()
+    nasoka = "istok"
 
-    for i in range(n):
-        tocka = input()
-        x_t, y_t = map(int, tocka.split(","))
-        tocki.append((x_t, y_t))
+    # n = int(input())
+    n = 5
+    tocki = [(2,6),(4,0), (6,5),(8,2),(8,3)]
 
-    problem = Pacman((x, y, nasoka, tuple(tocki)),obstacles_list)
-    print(breadth_first_graph_search(problem).solution())
+    # for i in range(n):
+    #     # tocka = input()
+    #     # x_t, y_t = map(int, tocka.split(","))
+    #     tocki.append((x_t, y_t))
+
+
+    problem = Pacman((x, y, nasoka, tuple(tocki)), tuple(obstacles_list))
+    print(astar_search(problem).solution())
