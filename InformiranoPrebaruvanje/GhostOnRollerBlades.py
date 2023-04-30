@@ -94,3 +94,62 @@ if __name__ == '__main__':
     problem = GhostOnSkates(ghost_pos, goal_pos)
     answer = recursive_best_first_search(problem)
     print(answer.solution())
+
+
+# class GhostOnSkates(Problem):
+#
+#     def __init__(self, initial, walls, n, goal=None):
+#         super().__init__(initial, goal)
+#         self.walls = walls
+#         self.n = n
+#
+#     def actions(self, state):
+#         return self.successor(state).keys()
+#
+#     def result(self, state, action):
+#         return self.successor(state)[action]
+#
+#     def goal_test(self, state):
+#         return state == self.goal
+#
+#     @staticmethod
+#     def check_valid(state, walls, n):
+#         x, y = state
+#         return x < n and y < n and state not in walls
+#
+#     def successor(self, state):
+#         successors = dict()
+#
+#         x, y = state
+#
+#         for i in range(1, 4):
+#             # Gore
+#             if self.check_valid((x, y + i), self.walls, self.n):
+#                 successors[f'Gore {i}'] = (x, y + i)
+#             # Desno
+#             elif self.check_valid((x + i, y), self.walls, self.n):
+#                 successors[f'Desno {i}'] = (x + i, y)
+#         return successors
+#
+#     def h(self, node):
+#
+#         x = node.state[0]
+#         y = node.state[1]
+#         px = self.goal[0]
+#         py = self.goal[1]
+#
+#         return abs(x - px) + (y - py)
+#
+#
+# if __name__ == '__main__':
+#     n = int(input())
+#     ghost_pos = (0, 0)
+#     goal_pos = (n - 1, n - 1)
+#
+#     num_holes = int(input())
+#     holes = list()
+#     for _ in range(num_holes):
+#         holes.append(tuple(map(int, input().split(','))))
+#
+#     problem = GhostOnSkates(ghost_pos, holes, n, goal_pos)
+#     print(astar_search(problem).solution())

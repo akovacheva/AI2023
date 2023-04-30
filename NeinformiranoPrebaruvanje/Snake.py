@@ -131,8 +131,7 @@ class Snake(Problem):
                     successors["Svrti Levo"] =(([(head_x, head_y - 1)] + body[:-1]), "JUG", zeleni_jabolki, crveni_jabolki)
 
         if nasoka == "ISTOK":
-            if head_y + 1 < self.grid_size[0] and (head_x , head_y + 1) not in crveni_jabolki and (
-            head_x , head_y + 1) not in body:
+            if head_y + 1 < self.grid_size[0] and (head_x , head_y + 1) not in crveni_jabolki and (head_x , head_y + 1) not in body:
                 if (head_x, head_y + 1) in zeleni_jabolki:
                     br_zeleni -= 1
                     successors["Svrti Levo"] = (([(head_x, head_y + 1)] + body), "SEVER", zeleni_jabolki, crveni_jabolki)
@@ -153,10 +152,13 @@ class Snake(Problem):
 
 
 if __name__ == '__main__':
-    n = int(input())
-    zeleni_jabolki = [tuple(map(int, input().split(','))) for _ in range(n)]
-    m = int(input())
-    crveni_jabolki = [tuple(map(int, input().split(','))) for _ in range(m)]
+
+
+
+
+    zeleni_jabolki = [(6, 9), (2, 7), (9, 5), (2, 3), (4, 3)]
+
+    crveni_jabolki = [(4, 6), (6, 5), (3, 3), (6, 8)]
 
     ze = tuple(zeleni_jabolki)
     cr = tuple(crveni_jabolki)
