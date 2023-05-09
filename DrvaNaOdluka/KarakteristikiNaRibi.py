@@ -1,3 +1,6 @@
+from sklearn.ensemble import RandomForestClassifier
+
+
 dataset = [[180.0, 23.6, 25.2, 27.9, 25.4, 14.0, 'Roach'],
            [12.2, 11.5, 12.2, 13.4, 15.6, 10.4, 'Smelt'],
            [135.0, 20.0, 22.0, 23.5, 25.0, 15.0, 'Perch'],
@@ -159,4 +162,57 @@ dataset = [[180.0, 23.6, 25.2, 27.9, 25.4, 14.0, 'Roach'],
            [1100.0, 40.1, 43.0, 45.5, 27.5, 16.3, 'Perch']]
 
 if __name__ == '__main__':
-    pass
+
+    col_index = int(input())
+    n = int(input())
+    crit = input()
+
+    train_set = dataset[:int(0.85 * len(dataset))]
+    train_x = [row[:-1] for row in train_set]
+    train_y = [row[-1] for row in train_set]
+
+    test_set = dataset[int(0.85 * len(dataset)):]
+    test_x = [row[:-1] for row in test_set]
+    test_y = [row[-1] for row in test_set]
+
+    #Klasifikator so kolekcija od drva
+
+    #Brojot na drva, kriterium i random
+    classifier = RandomForestClassifier(n_estimators=n, criterion=crit, random_state=0)
+    classifier.fit(train_x, train_y)
+
+    #Brishenje kolona
+    train_x_2 = list()
+    for t in train_x:
+        row = [t[i] for i in range(len(t)) if i != col_index]
+        train_x_2.append(row)
+
+    test_x_2 = list()
+    for t in test_x:
+        row = [t[i] for i in range(len(t)) if i != col_index]
+        test_x_2.append(row)
+
+    clasifier2 = RandomForestClassifier(n_estimators=n, criterion=crit, random_state=0)
+    clasifier2.fit(train_x_2, train_y)
+
+    accuracy = 0
+    for i in range(len(test_set)):
+        predicted_class = clasifier2.predict([test_x_2[i]])[0]
+        true_class = test_y[i]
+
+        if predicted_class == true_class:
+            accuracy += 1
+
+    accuracy = accuracy / len(test_set)
+
+    print(f'Accuracy: {accuracy}')
+
+    new_list = list()
+    entry = [float(el)for el in input().split(' ')]
+    for i in range(0, len(entry)):
+        if(i!= col_index):
+            new_list.append(entry[i])
+
+    predicted_class = clasifier2.predict([new_list])[0]
+    print(predicted_class)
+    print(clasifier2.predict_proba([new_list])[0])
