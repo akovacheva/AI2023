@@ -1,5 +1,7 @@
 import warnings
 from sklearn.exceptions import ConvergenceWarning
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import MinMaxScaler
 
 data = [['M', 17.99, 10.38, 122.8, 1001.0, 0.1184, 0.2776, 0.3001, 0.1471, 0.2419, 0.07871, 1.095, 0.9053, 8.589, 153.4,
          0.006399, 0.04904, 0.05373, 0.01587, 0.03003, 0.006193, 25.38, 17.33, 184.6, 2019.0, 0.1622, 0.6656, 0.7119,
@@ -1709,5 +1711,70 @@ data = [['M', 17.99, 10.38, 122.8, 1001.0, 0.1184, 0.2776, 0.3001, 0.1471, 0.241
          0.007189, 0.00466, 0.0, 0.0, 0.02676, 0.002783, 9.456, 30.37, 59.16, 268.6, 0.08996, 0.06444, 0.0, 0.0, 0.2871,
          0.07039]]
 
+
+def divide_sets(dataset):
+    maligen = [[1] + row[1:] for row in data if row[0] == "M"]
+    benigen = [[0] + row[1:] for row in data if row[0] == "B"]
+    train_set = maligen[:int(len(maligen) * 0.7)] + benigen[:int(len(benigen) * 0.7)]
+    test_set = maligen[int(len(maligen) * 0.7):] + benigen[int(len(benigen) * 0.7):]
+
+    return train_set, test_set
+
 if __name__ == '__main__':
     warnings.filterwarnings('ignore', category=ConvergenceWarning)
+
+    train_set, test_set = divide_sets(data)
+
+    train_x = [x[1:] for x in train_set]
+    train_y = [x[0] for x in train_set]
+    test_x = [x[1:] for x in test_set]
+    test_y = [x[0] for x in test_set]
+
+    scaler = MinMaxScaler(feature_range=(-1, 1))
+    scaler.fit(train_x)
+
+    n = int(input())
+    classifier = MLPClassifier(n, activation='relu', learning_rate_init=0.001, max_iter=20, random_state=0)
+    classifier.fit(scaler.transform(train_x), train_y)
+
+    tp, fp, tn, fn = 0, 0, 0, 0
+    predictions_train = classifier.predict(scaler.transform(train_x))
+
+    for pred, true in zip(predictions_train, train_y):
+        if true == 1:
+            if pred == true:
+                tp += 1
+            else:
+                fn += 1
+        else:
+            if pred == true:
+                tn += 1
+            else:
+                fp += 1
+
+    preciznost_train = tp / (tp + fp)
+    odziv_train = tp / (tp + fn)
+
+
+    tp, fp, tn, fn = 0, 0, 0, 0
+    predictions_test = classifier.predict(scaler.transform(test_x))
+
+    for pred, true in zip(predictions_test, test_y):
+        if true == 1:
+            if pred == true:
+                tp += 1
+            else:
+                fn += 1
+        else:
+            if pred == true:
+                tn += 1
+            else:
+                fp += 1
+
+    preciznost_test = tp / (tp + fp)
+    odziv_test = tp / (tp + fn)
+
+print(f'Preciznost so trenirachkoto mnozhestvo: {preciznost_train}')
+print(f'Odziv so trenirachkoto mnozhestvo: {odziv_train}')
+print(f'Preciznost so testirachkoto mnozhestvo: {preciznost_test}')
+print(f'Odziv so testirachkoto mnozhestvo: {odziv_test}')
